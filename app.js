@@ -8,7 +8,8 @@ var port = process.env.PORT || 3000;
 var app = express();
 
 mongoose.Promise = global.Promise;  
-var db = mongoose.connect('mongodb://localhost:3000/website', {useMongoClient: true});
+var db = mongoose.connect('mongodb://localhost/website', {useMongoClient: true});
+
 
 
 app.set('views', './views/pages');
@@ -117,8 +118,8 @@ app.get('/admin/update/:id', function(req, res) {
 
 //admin post movie
 app.post('/admin/movie/new', function(req, res) {
-	var id = req.body.movie._id;
-	var movieObj = req.body.movie;
+	var id = req.body['movie[_id]'];
+	var movieObj = req.body;
 	var _movie;
 
 	if(id !== 'undefined') {
@@ -138,21 +139,21 @@ app.post('/admin/movie/new', function(req, res) {
 
 	} else {
 		_movie = new Movie({
-			doctor: movieObj.doctor,
-			title: movieObj.title,
-			country: movieObj.country,
-			language: movieObj.language,
-			year: movieObj.year,
-			poster: movieObj.poster,
-			flash: movieObj.flash,
-			summary: movieObj.summary
+			doctor: movieObj['movie[doctor]'],
+			title: movieObj['movie[title]'],
+			country: movieObj['movie[country]'],
+			language: movieObj['movie[language]'],
+			year: movieObj['movie[year]'],
+			poster: movieObj['movie[poster]'],
+			flash: movieObj['movie[flash]'],
+			summary: movieObj['movie[summary]']
 		});
 
 		_movie.save(function(err, movie) {
 			if(err) {
 				console.log(err);
 			}
-			res,redirect('/movie/' + movie._id);
+			res.redirect('/movie/' + movie._id);
 		})
 	}
 })
