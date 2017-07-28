@@ -10,13 +10,17 @@ var app = express();
 mongoose.Promise = global.Promise;  
 var db = mongoose.connect('mongodb://localhost/website', {useMongoClient: true});
 
-
-
 app.set('views', './views/pages');
 app.set('view engine', 'pug');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 app.use(express.static(path.join(__dirname, 'bower_components')));
+app.locals.moment = require('moment');
 app.listen(port);
 
 console.log('web started on port ' + port);
@@ -27,7 +31,7 @@ app.get('/', function(req, res) {
 		if(err) {
 			console.log(err);
 		}
-
+		
 		res.render('index', {
 			title: 'website 首页',
 			movies: movies
