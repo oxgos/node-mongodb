@@ -189,7 +189,6 @@ app.get('/admin/list', function(req, res) {
 //list delete movie
 app.delete('/admin/list', function(req, res) {
 	var id = req.query.id;
-	console.log(id);
 	if(id) {
 		Movie.remove({_id: id}, function(err, moive) {
 			if(err) {
