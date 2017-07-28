@@ -1,0 +1,25 @@
+{
+  "name": "web",
+  "description": "website",
+  "main": "app.js",
+  "authors": [
+    "gjw"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "nodejs-mongodb"
+  ],
+  "homepage": "https://github.com/oxgos/node-mongodb",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
