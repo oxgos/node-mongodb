@@ -14,7 +14,7 @@ app.set('views', './views/pages');
 app.set('view engine', 'pug');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(bodyParser.json())
@@ -122,8 +122,10 @@ app.get('/admin/update/:id', function(req, res) {
 
 //admin post movie
 app.post('/admin/movie/new', function(req, res) {
-	var id = req.body['movie[_id]'];
-	var movieObj = req.body;
+	console.log(req.body);
+	console.log(typeof req.body);
+	var id = req.body.movie._id;
+	var movieObj = req.body.movie;
 	var _movie;
 
 	if(id !== 'undefined') {
@@ -143,14 +145,14 @@ app.post('/admin/movie/new', function(req, res) {
 
 	} else {
 		_movie = new Movie({
-			doctor: movieObj['movie[doctor]'],
-			title: movieObj['movie[title]'],
-			country: movieObj['movie[country]'],
-			language: movieObj['movie[language]'],
-			year: movieObj['movie[year]'],
-			poster: movieObj['movie[poster]'],
-			flash: movieObj['movie[flash]'],
-			summary: movieObj['movie[summary]']
+			doctor: movieObj.doctor,
+			title: movieObj.title,
+			country: movieObj.country,
+			language: movieObj.language,
+			year: movieObj.year,
+			poster: movieObj.poster,
+			flash: movieObj.flash,
+			summary: movieObj.summary
 		});
 
 		_movie.save(function(err, movie) {
