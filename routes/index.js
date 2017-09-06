@@ -1,18 +1,20 @@
-const express = require('express');
-const router = express.Router();
-const Movie = require('../model/movie');
+const express = require('express')
+const router = express.Router()
+const Movie = require('../model/movie')
 
 //index page
 router.get('/', function(req, res) {
-	Movie.fetch(function(err, movies) {
-		if(err) {
-			console.log(err);
-		}
-		
-		res.render('index', {
-			title: 'website 首页',
-			movies: movies
-			/* movies: [{
+    let _user = req.session.user
+
+    Movie.fetch(function(err, movies) {
+        if (err) {
+            console.log(err)
+        }
+
+        res.render('index', {
+            title: 'website 首页',
+            movies: movies
+                /* movies: [{
 			title: '机械战警',
 			_id: 1,
 			poster: 'http://r3.ykimg.com/05160000530EEB63675839160D0B79D5'
@@ -37,8 +39,8 @@ router.get('/', function(req, res) {
 			_id: 6,
 			poster: 'http://r3.ykimg.com/05160000530EEB63675839160D0B79D5'
 		}] */
-		})
-	});
+        })
+    })
 })
 
-module.exports = router;
+module.exports = router
