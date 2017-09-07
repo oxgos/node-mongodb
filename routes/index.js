@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Movie = require('../model/movie')
+const Movie = require('../app/model/movie')
 
 //index page
 router.get('/', function(req, res) {

@@ -8,6 +8,22 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     password: String,
+    // role: String,如果用String类型控制权限可根据下面的字段
+    // user
+    // admin
+    // super admin
+    role: {
+        type: Number,
+        default: 0
+    },
+    /* 
+        0: normal 普通用户
+        1: verify 邮件激活后的用户
+        2: professonal 高级用户
+
+        >10: admin 管理员
+        >50: super admin 超级管理员(开发时候用)
+    */
     meta: {
         createAt: {
             type: Date,

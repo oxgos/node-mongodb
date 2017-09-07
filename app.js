@@ -7,15 +7,13 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 
 const port = process.env.PORT || 3000
-const app = express();
+const app = express()
 
 // 路由引入
 const index = require('./routes/index')
-const detail = require('./routes/detail')
+const movie = require('./routes/movie')
+const user = require('./routes/user')
 const admin = require('./routes/admin')
-const list = require('./routes/list')
-const userlist = require('./routes/userlist')
-const usersign = require('./routes/usersign')
 
 // 连接数据库，PS:localhost/后面的是创建的数据库名称
 const dbUrl = 'mongodb://localhost/website'
@@ -23,7 +21,7 @@ mongoose.Promise = global.Promise
 mongoose.connect(dbUrl, { useMongoClient: true })
 
 // 设置视图相关路径和模板引擎
-app.set('views', './views/pages')
+app.set('views', './app/views/pages')
 app.set('view engine', 'pug')
 
 // parse application/x-www-form-urlencoded
@@ -68,44 +66,19 @@ console.log('web started on port ' + port);
 app.use((req, res, next) => {
     let _user = req.session.user
 
-    if (_user) {
-        res.locals.user = _user
-    }
+    res.locals.user = _user
+
     next()
 })
 
-// index page首页
+// index page首页路由
 app.use('/', index)
 
-// user signin登陆
-app.post('/user/signin', usersign)
+// user 用户相关路由
+app.use('/', user)
 
-// user signup注册
-app.post('/user/signup', usersign)
+// movie 电影相关路由
+app.use('/', movie)
 
-// user logout注销
-app.get('/logout', usersign)
-
-// detail page电影详情
-app.get('/movie/:id', detail)
-
-// admin page后台管理电影
-app.get('/admin/movie', admin)
-
-// admin update movie后台电影更新
-app.get('/admin/update/:id', admin)
-
-// admin post movie后台添加电影
-app.post('/admin/movie/new', admin)
-
-// userlist page后台用户列表页
-app.get('/admin/userlist', userlist)
-
-// list delete user后台
-// app.delete('/admin/userlist', userlist)
-
-// list page后台电影列表
-app.get('/admin/list', list)
-
-// list delete movie后台电影删除
-app.delete('/admin/list', list)
+// admin 后台管理相关路由
+app.use('/', admin)

@@ -1,6 +1,23 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../model/user')
+const User = require('../app/model/user')
+
+// 引入中间件，方法用exports暴露
+const { signinRequired, adminRequired } = require('../middleware/auth')
+
+// signin page
+router.get('/signin', (req, res) => {
+    res.render('signin', {
+        title: '用户登陆页'
+    })
+})
+
+// signup page
+router.get('/signup', (req, res) => {
+    res.render('signup', {
+        title: '用户注册页'
+    })
+})
 
 // signin
 router.post('/user/signin', (req, res) => {
@@ -13,7 +30,7 @@ router.post('/user/signin', (req, res) => {
             console.log(err)
         }
         if (!user) {
-            return res.redirect('/')
+            return res.redirect('/signup')
         }
         // 注意，这里是调用实例的方法，所以是user,而不是User构造函数对象
         user.comparePassword(password, (err, isMatch) => {
@@ -26,6 +43,7 @@ router.post('/user/signin', (req, res) => {
                 return res.redirect('/')
             } else {
                 console.log('Password is not matched')
+                return res.redirect('/signin')
             }
         })
     })
@@ -62,5 +80,35 @@ router.get('/logout', (req, res) => {
     delete req.session.user
     res.redirect('/')
 })
+
+//userlist page
+router.get('/admin/user/list', signinRequired, adminRequired, function(req, res) {
+    User.fetch(function(err, users) {
+        if (err) {
+            console.log(err);
+        }
+
+        res.render('userlist', {
+            title: 'website 用户列表页',
+            users: users
+        })
+    })
+})
+
+//list delete user
+/* router.delete('/admin/userlist', function(req, res) {
+    var id = req.query.id;
+    if (id) {
+        User.remove({ _id: id }, function(err, user) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json({ success: 1 });
+            }
+        })
+    }
+}) */
+
+// middleware for user
 
 module.exports = router
