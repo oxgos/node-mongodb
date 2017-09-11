@@ -9,12 +9,12 @@ const { signinRequired, adminRequired } = require('../middleware/auth')
 // 没有挂载路径的中间件，应用的每个请求都会执行该中间件
 router.use(signinRequired, adminRequired)
 
-router.param('id', function(req, res, next, id) {
+router.param('id', (req, res, next, id) => {
     next()
 })
 
 //admin page后台电影录入页
-router.get('/admin/movie/new', function(req, res) {
+router.get('/admin/movie/new', (req, res) => {
     res.render('admin', {
         title: 'website 后台录入页',
         movie: {
@@ -30,9 +30,8 @@ router.get('/admin/movie/new', function(req, res) {
     })
 })
 
-
 //admin post movie后台电影添加页
-router.post('/admin/movie/new', function(req, res) {
+router.post('/admin/movie/new', (req, res) => {
     // console.log(req.body);
     // console.log(typeof req.body);
     let id = req.body.movie._id;
@@ -40,13 +39,13 @@ router.post('/admin/movie/new', function(req, res) {
     let _movie;
 
     if (id !== 'undefined') {
-        Movie.findById(id, function(err, movie) {
+        Movie.findById(id, (err, movie) => {
             if (err) {
                 console.log(err);
             }
             _movie = _.extend(movie, movieObj);
 
-            _movie.save(function(err, movie) {
+            _movie.save((err, movie) => {
                 if (err) {
                     console.log(err);
                 }
@@ -66,7 +65,7 @@ router.post('/admin/movie/new', function(req, res) {
             summary: movieObj.summary
         });
 
-        _movie.save(function(err, movie) {
+        _movie.save((err, movie) => {
             if (err) {
                 console.log(err);
             }
@@ -76,16 +75,16 @@ router.post('/admin/movie/new', function(req, res) {
 })
 
 // 获取请求参数
-router.param('id', function(req, res, next, id) {
+router.param('id', (req, res, next, id) => {
     next()
 })
 
 //admin update movie后台电影更新页
-router.get('/admin/movie/update/:id', function(req, res) {
+router.get('/admin/movie/update/:id', (req, res) => {
     let id = req.params.id;
 
     if (id) {
-        Movie.findById(id, function(err, movie) {
+        Movie.findById(id, (err, movie) => {
             res.render('admin', {
                 title: 'imooc 后台更新页',
                 movie: movie
@@ -96,8 +95,8 @@ router.get('/admin/movie/update/:id', function(req, res) {
 
 
 //list page电影列表页
-router.get('/admin/movie/list', function(req, res) {
-    Movie.fetch(function(err, movies) {
+router.get('/admin/movie/list', (req, res) => {
+    Movie.fetch((err, movies) => {
         if (err) {
             console.log(err);
         }
@@ -120,10 +119,10 @@ router.get('/admin/movie/list', function(req, res) {
 })
 
 //list delete movie电影删除
-router.delete('/admin/movie/list', function(req, res) {
+router.delete('/admin/movie/list', (req, res) => {
     var id = req.query.id;
     if (id) {
-        Movie.remove({ _id: id }, function(err, moive) {
+        Movie.remove({ _id: id }, (err, moive) => {
             if (err) {
                 console.log(err);
             } else {

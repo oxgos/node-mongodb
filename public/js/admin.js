@@ -1,8 +1,8 @@
 $(function() {
     $('.del').click(function(e) {
-        let target = $(e.target);
-        let id = target.data('id');
-        let tr = $('.item-id-' + id);
+        let target = $(e.target)
+        let id = target.data('id')
+        let tr = $('.item-id-' + id)
 
         $.ajax({
                 type: 'DELETE',

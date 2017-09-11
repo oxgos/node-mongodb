@@ -5,9 +5,13 @@ const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 
 const commentSchema = new Schema({
-    movie: { type: ObjectId, ref: 'movies' },
-    from: { type: ObjectId, ref: 'users' },
-    to: { type: ObjectId, ref: 'users' },
+    movie: { type: ObjectId, ref: 'Movie' },
+    from: { type: ObjectId, ref: 'User' },
+    reply: [{
+        from: { type: ObjectId, ref: 'User' },
+        to: { type: ObjectId, ref: 'User' },
+        content: String
+    }],
     content: String,
     meta: {
         createAt: {

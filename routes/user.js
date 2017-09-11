@@ -26,6 +26,7 @@ router.post('/user/signin', (req, res) => {
     let password = _user.password
 
     User.findOne({ name: name }, (err, user) => {
+        console.log(req.to)
         if (err) {
             console.log(err)
         }
@@ -54,11 +55,10 @@ router.post('/user/signup', (req, res) => {
     // req.param('user)
     let _user = req.body.user
 
-    User.find({ name: _user.name }, (err, user) => {
+    User.findOne({ name: _user.name }, (err, user) => {
         if (err) {
             console.log(err)
         }
-
         if (user) {
             return res.redirect('/')
         } else {
@@ -82,8 +82,8 @@ router.get('/logout', (req, res) => {
 })
 
 //userlist page
-router.get('/admin/user/list', signinRequired, adminRequired, function(req, res) {
-    User.fetch(function(err, users) {
+router.get('/admin/user/list', signinRequired, adminRequired, (req, res) => {
+    User.fetch((err, users) => {
         if (err) {
             console.log(err);
         }
