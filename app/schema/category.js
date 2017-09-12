@@ -1,20 +1,12 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema
+
+// 获取ObjectId,populate需用到，用于表与表的关联
 const ObjectId = Schema.Types.ObjectId
 
-const movieSchema = new Schema({
-    doctor: String,
-    title: String,
-    language: String,
-    country: String,
-    year: Number,
-    category: { // 双向关联
-        type: ObjectId,
-        ref: 'Category'
-    },
-    summary: String,
-    flash: String,
-    poster: String,
+const categorySchema = new Schema({
+    name: String,
+    movies: [{ type: ObjectId, ref: 'Movie' }],
     meta: {
         createAt: {
             type: Date,
@@ -27,7 +19,7 @@ const movieSchema = new Schema({
     }
 });
 
-movieSchema.pre('save', function(next) {
+categorySchema.pre('save', function(next) {
     if (this.isNew) {
         this.meta.createAt = this.meta.updateAt = Date.now();
     } else {
@@ -37,7 +29,7 @@ movieSchema.pre('save', function(next) {
     next();
 });
 
-movieSchema.statics = {
+categorySchema.statics = {
     fetch: function(cb) {
         return this
             .find({})
@@ -51,4 +43,4 @@ movieSchema.statics = {
     }
 }
 
-module.exports = movieSchema;
+module.exports = categorySchema

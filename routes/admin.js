@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Movie = require('../app/model/movie')
+const Category = require('../app/model/category')
 const _ = require('underscore')
 const { signinRequired, adminRequired } = require('../middleware/auth')
 
@@ -15,18 +16,22 @@ router.param('id', (req, res, next, id) => {
 
 //admin page后台电影录入页
 router.get('/admin/movie/new', (req, res) => {
-    res.render('admin', {
-        title: 'website 后台录入页',
-        movie: {
-            title: '',
-            doctor: '',
-            country: '',
-            year: '',
-            poster: '',
-            flash: '',
-            summary: '',
-            language: ''
-        }
+    Category.find({}, (err, categories) => {
+        res.render('admin', {
+            title: 'website 后台录入页',
+            categories: categories,
+            movie: {} // 需把input里的value值${movie.title}改为movie.title，则undefined自动变为空值
+            /* movie: { // 这种则可以value值${movie.title}
+                title: '',
+                doctor: '',
+                country: '',
+                year: '',
+                poster: '',
+                flash: '',
+                summary: '',
+                language: ''
+            } */
+        })
     })
 })
 
@@ -38,7 +43,7 @@ router.post('/admin/movie/new', (req, res) => {
     let movieObj = req.body.movie;
     let _movie;
 
-    if (id !== 'undefined') {
+    if (id) {
         Movie.findById(id, (err, movie) => {
             if (err) {
                 console.log(err);
@@ -54,22 +59,32 @@ router.post('/admin/movie/new', (req, res) => {
         })
 
     } else {
-        _movie = new Movie({
-            doctor: movieObj.doctor,
-            title: movieObj.title,
-            country: movieObj.country,
-            language: movieObj.language,
-            year: movieObj.year,
-            poster: movieObj.poster,
-            flash: movieObj.flash,
-            summary: movieObj.summary
-        });
+        // req.body.movie拿到的是对象，新数据插入表格时直接作参数就可以了
+        _movie = new Movie(movieObj)
+            /* _movie = new Movie({
+                doctor: movieObj.doctor,
+                title: movieObj.title,
+                country: movieObj.country,
+                language: movieObj.language,
+                year: movieObj.year,
+                poster: movieObj.poster,
+                flash: movieObj.flash,
+                summary: movieObj.summary
+            }) */
+        let categoryId = _movie.category
 
         _movie.save((err, movie) => {
             if (err) {
                 console.log(err);
             }
-            res.redirect('/movie/' + movie._id);
+
+            Category.findById(categoryId, (err, category) => {
+                category.movies.push(movie._id)
+
+                category.save((err, category) => {
+                    res.redirect('/movie/' + movie._id)
+                })
+            })
         })
     }
 })
@@ -84,11 +99,24 @@ router.get('/admin/movie/update/:id', (req, res) => {
     let id = req.params.id;
 
     if (id) {
-        Movie.findById(id, (err, movie) => {
+        /* Movie.findById(id, (err, movie) => {
             res.render('admin', {
                 title: 'imooc 后台更新页',
                 movie: movie
             })
+        }) */
+        Category.find({}, (err, categories) => {
+            Movie
+                .findOne({ _id: id })
+                .populate('category', 'name')
+                .exec()
+                .then((movie) => {
+                    res.render('admin', {
+                        title: 'imooc 后台更新页',
+                        movie: movie,
+                        categories: categories
+                    })
+                })
         })
     }
 })
@@ -103,6 +131,7 @@ router.get('/admin/movie/list', (req, res) => {
 
         res.render('list', {
             title: 'website 列表页',
+            categoryName: movies.category,
             movies: movies
                 /* movies: [{
 			title: '机械战警',

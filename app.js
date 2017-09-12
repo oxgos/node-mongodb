@@ -14,6 +14,7 @@ const index = require('./routes/index')
 const movie = require('./routes/movie')
 const user = require('./routes/user')
 const admin = require('./routes/admin')
+const category = require('./routes/category_admin')
 
 // 连接数据库，PS:localhost/后面的是创建的数据库名称
 const dbUrl = 'mongodb://localhost/website'
@@ -82,3 +83,6 @@ app.use('/', movie)
 
 // admin 后台管理相关路由
 app.use('/', admin)
+
+// category_admin 后台分类管理相关路由
+app.use('/', category)
