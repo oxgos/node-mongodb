@@ -62,6 +62,9 @@ router.get('/results', (req, res) => {
     // 分类的ID
     let catId = req.query.cat
 
+    // 搜索内容
+    let q = req.query.q
+
     // 第几页
     let page = parseInt(req.query.p, 10)
 
@@ -71,33 +74,47 @@ router.get('/results', (req, res) => {
     // 总页数
     let totalPage
 
-    // 先查这分类的所有电影个数，计算出总页数
-    Category.findById(catId, (err, category) => {
-        totalPage = Math.ceil(category.movies.length / count)
-    })
+    if (catId) {
+        // 先查这分类的所有电影个数，计算出总页数
+        Category.findById(catId, (err, category) => {
+            totalPage = Math.ceil(category.movies.length / count)
+        })
 
-    Category
-        .findOne({ _id: catId })
-        .populate({
-            path: 'movies',
-            select: 'title poster',
-            options: {
-                limit: count, // 限制搜索的数量
-                skip: index // 忽略前面几个数据
-            }
-        })
-        .exec()
-        .then((category) => {
-            console.log(category.movies.length)
-            res.render('results', {
-                title: '结果列表页面',
-                keyword: category.name,
-                query: 'cat=' + catId,
-                currentPage: page + 1, // 当前页,因为传入的page从0开始，所以加1
-                totalPage: totalPage, // 页数的总数
-                category: category
+        Category
+            .findOne({ _id: catId })
+            .populate({
+                path: 'movies',
+                select: 'title poster',
+                options: {
+                    limit: count, // 限制搜索的数量
+                    skip: index // 忽略前面几个数据
+                }
             })
-        })
+            .exec()
+            .then((category) => {
+                console.log(category.movies.length)
+                res.render('results', {
+                    title: '结果列表页面',
+                    keyword: category.name,
+                    query: 'cat=' + catId,
+                    currentPage: (page + 1), // 当前页,因为传入的page从0开始，所以加1
+                    totalPage: totalPage, // 页数的总数
+                    category: category
+                })
+            })
+    } else {
+        Movie
+            .find({ title: new RegExp(q + '.*', 'i') })
+            .exec()
+            .then((movies) => {
+                res.render('results', {
+                    title: '结果列表页面',
+                    keyword: q,
+                    query: 'q=' + q,
+                    movies: movies
+                })
+            })
+    }
 })
 
 module.exports = router

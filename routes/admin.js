@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const multipartMiddleware = require('connect-multiparty')() // 处理enctype="multipart/form-data"上传文件中间件
 const Movie = require('../app/model/movie')
 const Category = require('../app/model/category')
 const _ = require('underscore')
-const { signinRequired, adminRequired } = require('../middleware/auth')
+const { signinRequired, adminRequired, savePoster } = require('../middleware/auth')
 
 // 路径可以用正则表达式匹配
 // router.use(/^\/admin/, signinRequired, adminRequired)
@@ -36,12 +37,17 @@ router.get('/admin/movie/new', (req, res) => {
 })
 
 //admin post movie后台电影添加页
-router.post('/admin/movie/new', (req, res) => {
+router.post('/admin/movie/new', multipartMiddleware, savePoster, (req, res) => {
     // console.log(req.body);
     // console.log(typeof req.body);
     let id = req.body.movie._id;
     let movieObj = req.body.movie;
     let _movie;
+
+    // 如果有上传文件
+    if (req.poster) {
+        movieObj.poster = req.poster
+    }
 
     if (id) {
         Movie.findById(id, (err, movie) => {

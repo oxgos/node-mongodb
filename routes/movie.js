@@ -11,7 +11,15 @@ router.param('id', function(req, res, next, id) {
 
 // 电影详情页
 router.get('/movie/:id', (req, res) => {
-    let id = req.params.id;
+    let id = req.params.id
+
+    // 电影访问量
+    Movie.update({ _id: id }, { $inc: { pv: 1 } }, (err) => {
+        if (err) {
+            console.log(err)
+        }
+    })
+
     Movie.findById(id, (err, movie) => {
         if (err) {
             console.log(err)

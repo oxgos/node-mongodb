@@ -7,7 +7,7 @@ block content
                 .panel-heading
                     h3 #{keyword}
                 .panel-body
-                    if category.movies && category.movies.length > 0
+                    if category && (category.movies && category.movies.length > 0)
                         each item in category.movies
                             .col-md-2
                                 .thumbnail
@@ -16,6 +16,15 @@ block content
                                     .caption
                                         h3 #{item.title}
                                         p: a.btn.btn-primary(href=`/movie/${item._id}`, role="button") 观看预告片
+                    else
+                        each item in movies
+                            .col-md-2
+                                .thumbnail
+                                    a(href=`/movie/${item._id}`)
+                                        img(src=`${item.poster}`, alt=`${item.title}`)
+                                    .caption
+                                        h3 #{item.title}
+                                        p: a.btn.btn-primary(href=`/movie/${item._id}`, role="button") 观看预告片                 
             ul.pagination
                 - for (let i = 0; i < totalPage; i++) {
                     - if (currentPage === (i + 1)) {

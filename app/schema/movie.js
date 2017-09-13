@@ -8,6 +8,10 @@ const movieSchema = new Schema({
     language: String,
     country: String,
     year: Number,
+    pv: {
+        type: Number,
+        default: 0
+    },
     category: { // 双向关联
         type: ObjectId,
         ref: 'Category'
