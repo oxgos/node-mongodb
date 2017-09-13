@@ -3,7 +3,7 @@ const router = express.Router()
 const Movie = require('../app/model/movie')
 const Category = require('../app/model/Category')
 
-//index page
+//index page首页
 router.get('/', function(req, res) {
     // let _user = req.session.user
     Category
@@ -51,6 +51,53 @@ router.get('/', function(req, res) {
     // 	}] */
     //     })
     // })
+})
+
+
+// 分类详情页
+router.get('/results', (req, res) => {
+    // 每页显示的电影数量
+    const count = 2
+
+    // 分类的ID
+    let catId = req.query.cat
+
+    // 第几页
+    let page = parseInt(req.query.p, 10)
+
+    // 忽略前面数据的个数
+    let index = page * count
+
+    // 总页数
+    let totalPage
+
+    // 先查这分类的所有电影个数，计算出总页数
+    Category.findById(catId, (err, category) => {
+        totalPage = Math.ceil(category.movies.length / count)
+    })
+
+    Category
+        .findOne({ _id: catId })
+        .populate({
+            path: 'movies',
+            select: 'title poster',
+            options: {
+                limit: count, // 限制搜索的数量
+                skip: index // 忽略前面几个数据
+            }
+        })
+        .exec()
+        .then((category) => {
+            console.log(category.movies.length)
+            res.render('results', {
+                title: '结果列表页面',
+                keyword: category.name,
+                query: 'cat=' + catId,
+                currentPage: page + 1, // 当前页,因为传入的page从0开始，所以加1
+                totalPage: totalPage, // 页数的总数
+                category: category
+            })
+        })
 })
 
 module.exports = router

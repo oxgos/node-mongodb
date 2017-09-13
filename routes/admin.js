@@ -48,13 +48,30 @@ router.post('/admin/movie/new', (req, res) => {
             if (err) {
                 console.log(err);
             }
+
+            // 更改电影分类后，删除原先分类里的电影数据
+            Category.findById(movie.category, (err, category) => {
+                for (let i = 0; i < category.movies.length; i++) {
+                    if (category.movies[i].toString() === id.toString()) {
+                        category.movies.splice(i, 1)
+                        category.save()
+                    }
+                }
+            })
+
             _movie = _.extend(movie, movieObj);
 
             _movie.save((err, movie) => {
                 if (err) {
                     console.log(err);
                 }
-                res.redirect('/movie/' + movie._id);
+                // 保存电影分类
+                Category.findOne({ _id: movieObj.category }, (err, category) => {
+                    category.movies.push(movieObj._id)
+                    category.save((err, category) => {
+                        res.redirect('/movie/' + movie._id)
+                    })
+                })
             })
         })
 

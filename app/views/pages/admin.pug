@@ -1,4 +1,4 @@
-extend ../layout
+extends ../layout
 
 block content
 	.container
@@ -6,6 +6,11 @@ block content
 			form.form-horizontal(method="post", action="/admin/movie/new")
 				if movie._id
 					input(type="hidden", name="movie[_id]", value=movie._id)
+				if !movie._id	
+					.form-group
+						label.col-sm-2.control-label(for="douban") 同步豆瓣
+						.col-sm-10
+							input#douban.form-control(type="text")
 				if movie.category	
 					.form-group
 						label.col-sm-2.control-label(for="inputCategory") 电影分类
@@ -29,9 +34,9 @@ block content
 					.col-sm-10
 						input#inputDoctor.form-control(type="text", name="movie[doctor]",value=movie.doctor)
 				.form-group
-					lable.col-sm-2.control-label(for="inputCountry") 年份
+					lable.col-sm-2.control-label(for="inputYear") 年份
 					.col-sm-10
-						input#inputCountry.form-control(type="text", name="movie[year]", value=movie.year)
+						input#inputYear.form-control(type="text", name="movie[year]", value=movie.year)
 				.form-group
 					lable.col-sm-2.control-label(for="inputCountry") 国家
 					.col-sm-10
@@ -54,4 +59,5 @@ block content
 						input#inputSummary.form-control(type="text", name="movie[summary]", value=movie.summary)
 				.form-group
 					.col-sm-offset-2.col-sm-10
-						button.btn.btn-default(type="submit") 录入							
+						button.btn.btn-default(type="submit") 录入
+	script(src="/js/admin.js")

@@ -17,7 +17,7 @@ const categorySchema = new Schema({
             default: Date.now()
         }
     }
-});
+})
 
 categorySchema.pre('save', function(next) {
     if (this.isNew) {
