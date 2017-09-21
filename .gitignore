@@ -1,7 +1,8 @@
 # bower_components
 !/public/js
 /public/libs
-
+public/build
+public/build/*
 
 # node_modules
 /node_modules

@@ -1,8 +1,8 @@
 $(function() {
     $('.del').click(function(e) {
-        let target = $(e.target)
-        let id = target.data('id')
-        let tr = $('.item-id-' + id)
+        var target = $(e.target)
+        var id = target.data('id')
+        var tr = $('.item-id-' + id)
 
         $.ajax({
                 type: 'DELETE',
@@ -16,10 +16,10 @@ $(function() {
                 }
             })
     })
-    let bb;
+    var bb;
     // 输入对应豆瓣电影id，获取电影信息
     $("#douban").blur(function(e) {
-        let id = $(this).val()
+        var id = $(this).val()
         $.ajax({
             url: 'https://api.douban.com/v2/movie/subject/' + id,
             cache: true,

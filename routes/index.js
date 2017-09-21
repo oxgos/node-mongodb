@@ -1,7 +1,7 @@
-const express = require('express')
-const router = express.Router()
-const Movie = require('../app/model/movie')
-const Category = require('../app/model/Category')
+var express = require('express')
+var router = express.Router()
+var Movie = require('../app/model/movie')
+var Category = require('../app/model/Category')
 
 //index page首页
 router.get('/', function(req, res) {

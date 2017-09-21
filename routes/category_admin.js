@@ -1,7 +1,7 @@
-const express = require('express')
-const router = express.Router()
-const Category = require('../app/model/category')
-const { signinRequired, adminRequired } = require('../middleware/auth')
+var express = require('express')
+var router = express.Router()
+var Category = require('../app/model/category')
+var { signinRequired, adminRequired } = require('../middleware/auth')
 
 router.use(signinRequired, adminRequired)
 

@@ -1,8 +1,8 @@
-const express = require('express')
-const router = express.Router()
-const Movie = require('../app/model/movie')
-const Comment = require('../app/model/comment')
-const { signinRequired } = require('../middleware/auth')
+var express = require('express')
+var router = express.Router()
+var Movie = require('../app/model/movie')
+var Comment = require('../app/model/comment')
+var { signinRequired } = require('../middleware/auth')
 
 // 获取请求参数
 router.param('id', function(req, res, next, id) {

@@ -1,23 +1,29 @@
-const express = require('express')
-const path = require('path')
-const mongoose = require('mongoose')
-const session = require('express-session')
-const mongoStore = require('connect-mongo')(session)
-const bodyParser = require('body-parser')
-const morgan = require('morgan')
+var express = require('express')
+var path = require('path')
+var mongoose = require('mongoose')
+var session = require('express-session')
+var mongoStore = require('connect-mongo')(session)
+var bodyParser = require('body-parser')
+var morgan = require('morgan')
 
-const port = process.env.PORT || 3000
-const app = express()
+var port = process.env.PORT || 3001
+var app = express()
 
 // 路由引入
-const index = require('./routes/index')
-const movie = require('./routes/movie')
-const user = require('./routes/user')
-const admin = require('./routes/admin')
-const category = require('./routes/category_admin')
+var index = require('./routes/index')
+var movie = require('./routes/movie')
+var user = require('./routes/user')
+var admin = require('./routes/admin')
+var category = require('./routes/category_admin')
 
 // 连接数据库，PS:localhost/后面的是创建的数据库名称
-const dbUrl = 'mongodb://localhost/website'
+var env = process.env.NODE_ENV || 'development'
+var dbUrl = 'mongodb://admin_gjw:Dodi880125$@127.0.0.1:19999/website'
+
+if (env === 'development') {
+    var dbUrl = 'mongodb://localhost/website'
+}
+
 mongoose.Promise = global.Promise
 mongoose.connect(dbUrl, { useMongoClient: true })
 

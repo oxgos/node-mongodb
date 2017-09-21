@@ -1,10 +1,10 @@
-const express = require('express')
-const router = express.Router()
-const multipartMiddleware = require('connect-multiparty')() // 处理enctype="multipart/form-data"上传文件中间件
-const Movie = require('../app/model/movie')
-const Category = require('../app/model/category')
-const _ = require('underscore')
-const { signinRequired, adminRequired, savePoster } = require('../middleware/auth')
+var express = require('express')
+var router = express.Router()
+var multipartMiddleware = require('connect-multiparty')() // 处理enctype="multipart/form-data"上传文件中间件
+var Movie = require('../app/model/movie')
+var Category = require('../app/model/category')
+var _ = require('underscore')
+var { signinRequired, adminRequired, savePoster } = require('../middleware/auth')
 
 // 路径可以用正则表达式匹配
 // router.use(/^\/admin/, signinRequired, adminRequired)

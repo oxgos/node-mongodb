@@ -11,9 +11,40 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['public/js/**', 'model/**/*.js', 'schema/**/*.js'],
-                tasks: ['jshint'],
+                // tasks: ['jshint'],
                 options: {
                     livereload: true
+                }
+            },
+            styles: {
+                files: ['public/**/*.less'],
+                tasks: ['less'],
+                options: {
+                    nospawn: true
+                }
+            }
+        },
+        uglify: {
+            my_target: {
+                files: {
+                    'public/build/admin.min.js': ['public/js/admin.js'],
+                    'public/build/detail.min.js': ['public/js/detail.js']
+                }
+            },
+            // tasks: ['jshint'],
+            options: {
+                mangle: false
+            }
+        },
+        less: {
+            development: {
+                options: {
+                    compress: true,
+                    yuicompress: true,
+                    optimization: 2
+                },
+                files: {
+                    'public/build/index.css': 'public/less/index.less'
                 }
             }
         },
@@ -35,14 +66,14 @@ module.exports = function(grunt) {
             }
         },
         concurrent: {
-            tasks: ['nodemon', 'watch'],
+            tasks: ['nodemon', 'watch', 'less', 'uglify'],
             options: {
                 logConcurrentOutput: true
             }
         }
     })
 
-    grunt.loadNpmTasks('grunt-contrib-jshint')
+    // grunt.loadNpmTasks('grunt-contrib-jshint')
 
     // 文件有改动，就会重新执行你在它里面注册好的任务
     grunt.loadNpmTasks('grunt-contrib-watch')
@@ -52,8 +83,12 @@ module.exports = function(grunt) {
 
     // 针对less,sass,stylus慢任务的编译优化
     grunt.loadNpmTasks('grunt-concurrent')
+    grunt.loadNpmTasks('grunt-contrib-less')
+    grunt.loadNpmTasks('grunt-contrib-uglify')
 
     grunt.option('force', true)
+
+    grunt.registerTask('build', ['less', 'uglify'])
 
     // 设置首先执行的默认任务
     grunt.registerTask('default', ['concurrent'])

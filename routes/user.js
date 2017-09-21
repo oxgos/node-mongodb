@@ -1,9 +1,9 @@
-const express = require('express')
-const router = express.Router()
-const User = require('../app/model/user')
+var express = require('express')
+var router = express.Router()
+var User = require('../app/model/user')
 
 // 引入中间件，方法用exports暴露
-const { signinRequired, adminRequired } = require('../middleware/auth')
+var { signinRequired, adminRequired } = require('../middleware/auth')
 
 // signin page
 router.get('/signin', (req, res) => {
