@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var Movie = require('../app/model/movie')
-var Category = require('../app/model/Category')
+var Category = require('../app/model/category')
 
 //index page首页
 router.get('/', function(req, res) {

@@ -18,7 +18,7 @@ var category = require('./routes/category_admin')
 
 // 连接数据库，PS:localhost/后面的是创建的数据库名称
 var env = process.env.NODE_ENV || 'development'
-var dbUrl = 'mongodb://admin_gjw:Dodi880125$@127.0.0.1:19999/website'
+var dbUrl = 'mongodb://*****:*****$@127.0.0.1:*****/website'
 
 if (env === 'development') {
     var dbUrl = 'mongodb://localhost/website'
